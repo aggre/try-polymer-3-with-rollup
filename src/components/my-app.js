@@ -7,14 +7,6 @@ export default class extends PolymerElement {
 		return `<my-name></my-name>`
 	}
 
-	static get properties() {
-		return {
-			isGameCompleted: {
-				type: Boolean
-			}
-		}
-	}
-
 }
 
 customElements.define('my-name', MyName)

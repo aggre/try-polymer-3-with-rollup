@@ -4,6 +4,7 @@
   "license": "MIT",
   "flat": true,
   "scripts": {
+    "start": "node server.js",
     "build": "rollup -c",
     "prebuild": "xo",
     "lint": "xo --fix",

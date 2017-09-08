@@ -1,13 +1,11 @@
-const http = require('http')
 const url = require('url')
 const path = require('path')
 const fs = require('fs')
 
 const defaultObject = '/index.html'
-const port = process.argv[2] || 3000
+const port = process.env.PORT || 3000
 
-const server = http.createServer()
-server.on('request', (request, response) => {
+require('http').createServer((req, res) => {
 	const Response = {
 		200(file, filename) {
 			const header = {
@@ -30,19 +28,19 @@ server.on('request', (request, response) => {
 			if (/.+\.json/.test(filename)) {
 				header['Content-Type'] = 'application/json'
 			}
-			response.writeHead(200, header)
-			response.write(file, 'binary')
-			response.end()
+			res.writeHead(200, header)
+			res.write(file, 'binary')
+			res.end()
 		},
 		404() {
-			response.writeHead(404, {'Content-Type': 'text/plain'})
-			response.write('404 Not Found\n')
-			response.end()
+			res.writeHead(404, {'Content-Type': 'text/plain'})
+			res.write('404 Not Found\n')
+			res.end()
 		},
 		500(err) {
-			response.writeHead(500, {'Content-Type': 'text/plain'})
-			response.write(err + '\n')
-			response.end()
+			res.writeHead(500, {'Content-Type': 'text/plain'})
+			res.write(err + '\n')
+			res.end()
 		}
 	}
 	const fileExists = filename => {
@@ -65,11 +63,10 @@ server.on('request', (request, response) => {
 		})
 	}
 
-	const uri = url.parse(request.url).pathname
+	const uri = url.parse(req.url).pathname
 	const filename = path.join(process.cwd(), uri)
 
 	fileExists(filename)
-})
+}).listen(port)
 
-server.listen(parseInt(port, 10))
 console.log('Server running at http://localhost:' + port)
